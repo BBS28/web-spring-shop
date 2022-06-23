@@ -1,5 +1,6 @@
 package com.epam.learn.shchehlov.webspringshop.controller;
 
+import com.epam.learn.shchehlov.webspringshop.dto.UserDto;
 import com.epam.learn.shchehlov.webspringshop.entity.User;
 import com.epam.learn.shchehlov.webspringshop.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -33,17 +34,17 @@ class UserControllerTest {
 
     @Test
     void createNewUser() {
-        User user = new User();
-        user.setLogin("Login");
+        UserDto userDto = new UserDto();
+        userDto.setLogin("Login");
         when(userService.findUserByLogin(anyString())).thenReturn(null).thenReturn(new User());
         when(bindingResult.hasErrors()).thenReturn(false).thenReturn(true);
 
-        assertThat(userController.createNewUser(user, bindingResult).getStatusCode())
+        assertThat(userController.createNewUser(userDto, bindingResult).getStatusCode())
                 .isEqualTo(HttpStatus.CREATED);
-        verify(userService).createUser(user);
-        assertThat(userController.createNewUser(user, bindingResult).getStatusCode())
+        verify(userService).createUser(userDto);
+        assertThat(userController.createNewUser(userDto, bindingResult).getStatusCode())
                 .isEqualTo(HttpStatus.BAD_REQUEST);
 
-        userController.createNewUser(user, bindingResult);
+        userController.createNewUser(userDto, bindingResult);
     }
 }

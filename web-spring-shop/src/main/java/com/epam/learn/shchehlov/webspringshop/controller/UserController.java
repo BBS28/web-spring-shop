@@ -1,5 +1,6 @@
 package com.epam.learn.shchehlov.webspringshop.controller;
 
+import com.epam.learn.shchehlov.webspringshop.dto.UserDto;
 import com.epam.learn.shchehlov.webspringshop.entity.User;
 import com.epam.learn.shchehlov.webspringshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,8 @@ public class UserController {
     }
 
     @PostMapping(value = "/registration")
-    public ResponseEntity<?> createNewUser(@Valid User user, BindingResult bindingResult) {
-        User userExists = userService.findUserByLogin(user.getLogin());
+    public ResponseEntity<?> createNewUser(@Valid UserDto userDto, BindingResult bindingResult) {
+        User userExists = userService.findUserByLogin(userDto.getLogin());
 
         if (userExists != null) {
             bindingResult.rejectValue("login", "error.user",
@@ -33,7 +34,7 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+            return new ResponseEntity<>(userService.createUser(userDto), HttpStatus.CREATED);
         }
     }
 }
