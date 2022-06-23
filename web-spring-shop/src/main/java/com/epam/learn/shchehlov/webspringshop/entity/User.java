@@ -1,7 +1,9 @@
 package com.epam.learn.shchehlov.webspringshop.entity;
 
 import com.epam.learn.shchehlov.webspringshop.entity.attribute.Role;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
@@ -24,6 +26,8 @@ import java.io.Serializable;
 @Setter
 @ToString
 @Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements Serializable {
 
     @Id

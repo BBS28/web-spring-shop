@@ -1,7 +1,9 @@
 package com.epam.learn.shchehlov.webspringshop.service.impl;
 
+import com.epam.learn.shchehlov.webspringshop.dto.UserDto;
 import com.epam.learn.shchehlov.webspringshop.entity.User;
 import com.epam.learn.shchehlov.webspringshop.entity.attribute.Role;
+import com.epam.learn.shchehlov.webspringshop.mappers.UserMapper;
 import com.epam.learn.shchehlov.webspringshop.repository.UserRepository;
 import com.epam.learn.shchehlov.webspringshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,16 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(
+            UserRepository userRepository,
+            UserMapper userMapper,
+            BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -35,14 +42,17 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    public User createUser(User user) {
+    @Override
+    public User createUser(UserDto userDto) {
+        User user = userMapper.toUser(userDto);
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRole(Role.ROLE_USER);
         return userRepository.saveAndFlush(user);
     }
 
     @Override
-    public void deleteUser(User user) {
+    public void deleteUser(UserDto userDto) {
+        User user = findUserByLogin(userDto.getLogin());
         userRepository.delete(user);
     }
 

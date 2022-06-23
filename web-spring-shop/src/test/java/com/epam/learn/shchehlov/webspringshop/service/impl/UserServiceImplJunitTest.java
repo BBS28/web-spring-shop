@@ -1,7 +1,9 @@
 package com.epam.learn.shchehlov.webspringshop.service.impl;
 
+import com.epam.learn.shchehlov.webspringshop.dto.UserDto;
 import com.epam.learn.shchehlov.webspringshop.entity.User;
 import com.epam.learn.shchehlov.webspringshop.entity.attribute.Role;
+import com.epam.learn.shchehlov.webspringshop.mappers.UserMapper;
 import com.epam.learn.shchehlov.webspringshop.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +38,9 @@ class UserServiceImplJunitTest {
 
     @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Mock
+    private UserMapper userMapper;
 
     @BeforeEach
     public void setUp() {
@@ -92,16 +97,17 @@ class UserServiceImplJunitTest {
 
     @Test
     void testCreateUser() {
-        User userData = new User();
-        userData.setFirstName("name");
-        userData.setLastName("Lastname");
-        userData.setEmail("email@email.exem");
-        userData.setLogin("Login");
-        userData.setPassword("Password123");
-        userData.setMailing(true);
-
+        UserDto userDto = new UserDto();
+        userDto.setFirstName("name");
+        userDto.setLastName("Lastname");
+        userDto.setEmail("email@email.exem");
+        userDto.setLogin("Login");
+        userDto.setPassword("Password123");
+        userDto.setMailing(true);
         when(userRepository.saveAndFlush(any(User.class))).thenReturn(user1);
-        User createdUser = userService.createUser(userData);
+        when(userMapper.toUser(any(UserDto.class))).thenReturn(user1);
+
+        User createdUser = userService.createUser(userDto);
 
         assertNotNull(createdUser);
         assertEquals(1L, createdUser.getId());

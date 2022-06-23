@@ -1,5 +1,6 @@
 package com.epam.learn.shchehlov.webspringshop.service;
 
+import com.epam.learn.shchehlov.webspringshop.dto.UserDto;
 import com.epam.learn.shchehlov.webspringshop.entity.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -12,9 +13,9 @@ public interface UserService extends UserDetailsService{
 
     List<User> findAllUsers();
 
-    User createUser(User user);
+    User createUser(UserDto userDto);
 
-    void deleteUser(User user);
+    void deleteUser(UserDto userDto);
 
     void deleteAllUsers();
 
